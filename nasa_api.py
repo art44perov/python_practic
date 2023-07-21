@@ -7,7 +7,7 @@ def main():
     translator = Translator()
     api_key = "API_KEY"
     start_date = datetime.today()
-    end_date = datetime.date(start_date - timedelta(days=1))
+    end_date = datetime.date(start_date + timedelta(days=1))
     start_date = datetime.date(start_date)
     str_query = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date}&end_date={end_date}&api_key={api_key}"
     response = requests.get(str_query)
