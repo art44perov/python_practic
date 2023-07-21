@@ -14,10 +14,8 @@ def main():
     if response.status_code == 200:
         stroke_s = json.loads(response.text)['near_earth_objects']#['2023-07-20']
         print(f"Астероиды, которые в период с {end_date} по {start_date} будут сближаться с планетой Земля, по данным NASA")
-        print(type(stroke_s))
         for j in stroke_s:
             stroke_a = stroke_s[j]
-
             print(f'\nАстроиды на дату {j}:\n')
             for i in range(len(stroke_a)):
                 name_a = stroke_a[i]['name']
