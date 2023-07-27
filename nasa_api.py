@@ -12,7 +12,7 @@ def main():
     str_query = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date}&end_date={end_date}&api_key={api_key}"
     response = requests.get(str_query)
     if response.status_code == 200:
-        stroke_s = json.loads(response.text)['near_earth_objects']#['2023-07-20']
+        stroke_s = json.loads(response.text)['near_earth_objects']
         print(f"Астероиды, которые в период с {end_date} по {start_date} будут сближаться с планетой Земля, по данным NASA")
         for j in stroke_s:
             stroke_a = stroke_s[j]
