@@ -9,8 +9,7 @@ name_apps = "Finansion"
 KV = '''
 MDBoxLayout:
     orientation: "vertical"
-
-
+    
     MDTopAppBar:
         title: "''' +  name_apps  + '''"
         right_action_items: [["''' +  btn_swich_theme  + '''", lambda x: app.theme_style()]]
@@ -28,8 +27,10 @@ MDBoxLayout:
         MDTopAppBar:
             icon: "plus"
             type: "bottom"
-            on_action_button: app.callback(self.icon)
+            on_action_button: app.see_message_tests(self.icon)
 '''
+
+
 class MainApp(MDApp):
     def build(self):
         self.theme_cls.theme_style_switch_animation = True
@@ -38,11 +39,8 @@ class MainApp(MDApp):
         self.theme_cls.theme_style_switch_animation_duration = 0.8
         return Builder.load_string(KV)
 
-    def callback(self, button):
-        Snackbar(text="Add transaction").open()
-
-    def callback_menu(self):
-        Snackbar(text="Hello World").open()
+    def see_message_tests(self, button):
+        Snackbar(text="Add transaction...").open()
 
     def theme_style(self):
         self.theme_cls.primary_palette = (
