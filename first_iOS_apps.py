@@ -20,18 +20,18 @@ MDScreen:
 
         MDBottomNavigationItem:
             name: 'screen 1'
-            text: 'Mail'
-            icon: 'gmail'
-            badge_icon: "numeric-10"
+            text: 'Home'
+            icon: 'home'
+            # badge_icon: "numeric-10"
 
             MDLabel:
-                text: 'Mail'
+                text: ''
                 halign: 'center'
 
         MDBottomNavigationItem:
             name: 'screen 2'
-            text: 'Twitter'
-            icon: 'twitter'
+            text: 'Wallet'
+            icon: 'wallet'
             badge_icon: "numeric-5"
 
             MDLabel:
@@ -40,12 +40,21 @@ MDScreen:
 
         MDBottomNavigationItem:
             name: 'screen 3'
-            text: 'LinkedIN'
-            icon: 'linkedin'
+            text: 'Report'
+            icon: 'chart-arc'
 
             MDLabel:
                 text: 'LinkedIN'
-                halign: 'center'         
+                halign: 'center'  
+
+        MDBottomNavigationItem:
+            name: 'screen 4'
+            text: 'Setting'
+            icon: 'cog'
+
+            MDLabel:
+                text: 'Setting page'
+                halign: 'center'
 '''
 
 
