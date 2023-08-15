@@ -6,28 +6,46 @@ from kivymd.uix.snackbar import Snackbar
 btn_swich_theme = "theme-light-dark"
 name_apps = "Finansion"
 
+color_1 = "#FFDB40"
+color_2 = "#50026E"
+color_3 = "#4EA429"
+
 KV = '''
-MDBoxLayout:
-    orientation: "vertical"
-    
-    MDTopAppBar:
-        title: "''' +  name_apps  + '''"
-        right_action_items: [["''' +  btn_swich_theme  + '''", lambda x: app.theme_style()]]
+MDScreen:
 
-    MDLabel:
-        text: "This theme style - {}".format(app.theme_cls.theme_style)
-        halign: "center"
-        font_style: "H5"
-        bold: True
-        allow_selection: True
+    MDBottomNavigation:
+        #panel_color: "#eeeaea"
+        selected_color_background: "orange"
+        text_color_active: "lightgrey"
 
-        
-    MDBottomAppBar:
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Mail'
+            icon: 'gmail'
+            badge_icon: "numeric-10"
 
-        MDTopAppBar:
-            icon: "plus"
-            type: "bottom"
-            on_action_button: app.see_message_tests(self.icon)
+            MDLabel:
+                text: 'Mail'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'screen 2'
+            text: 'Twitter'
+            icon: 'twitter'
+            badge_icon: "numeric-5"
+
+            MDLabel:
+                text: 'Twitter'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'screen 3'
+            text: 'LinkedIN'
+            icon: 'linkedin'
+
+            MDLabel:
+                text: 'LinkedIN'
+                halign: 'center'         
 '''
 
 
