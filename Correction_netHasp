@@ -1,0 +1,106 @@
+#############################################
+####|                                   |####
+####|      ╔═══╦═══╦════╗─╔╗─╔╦╗─╔╗     |####
+####|      ║╔═╗║╔═╗║╔╗╔╗║─║║─║║║─║║     |####
+####|      ║║─║║╚═╝╠╝║║╚╝─║╚═╝║╚═╝║     |####
+####|      ║╚═╝║╔╗╔╝─║║───╚══╗╠══╗║     |####
+####|      ║╔═╗║║║╚╗─║║──────║║──║║     |####
+####|      ╚╝─╚╩╝╚═╝─╚╝──────╚╝──╚╝     |####
+####|                                   |####
+#############################################
+
+import sys
+import argparse
+import requests
+from urllib.parse import urlencode
+
+base_url = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+public_key = '' #Ссылка на скачивание файла с яндекс диска  
+readFile = True
+writeFile = True
+globalDiskUpload = True
+sharedDiskDownload = True
+DownloadStockFile = True
+
+def createParser ():
+    parser = argparse.ArgumentParser()
+    parser.add_argument ('-p', '--path', default='C:\\Program Files (x86)\\1cv8\\nethasp.ini', help = ' - Path to file nethasp.ini, default path = "C:\\Program Files (x86)\\1cv8\\conf\\nethasp.ini"')
+    parser.add_argument ('-r', '--readFile', action='store_const', const=readFile, default=False, help = ' - Reading file, need using with parament "-arg" for reading only one parametrs')
+    parser.add_argument ('-arg', '--argument',default='',help= ' - parametr for reading from file')
+    parser.add_argument ('-w', '--write', action='store_const', const=writeFile, default=False, help = ' - writing in file line with argument ("-arg") with value ("-vP") if value is none then file will not be written')
+    parser.add_argument ('-vP', '--valueParametr',default='',help= ' - value argument')
+    parser.add_argument ('-gUp', '--sharedDiskUpload', action='store_const', const=globalDiskUpload, default=False, help = ' - upload file to shared  disk before written file')
+    parser.add_argument ('-pSD', '--pathSharedDisk',default='',help= ' - path to shared  disk') 
+    parser.add_argument ('-sDn', '--sharedDiskDownload', action='store_const', const=sharedDiskDownload, default=False, help = ' - download file "nethasp.ini" from shared disk. using with arguments -pSD and -pDn')
+    parser.add_argument ('-pDn', '--pathToDownload',default='',help= ' - path to download file from shared disk')
+    parser.add_argument ('--DownloadStockFile', action='store_const', const=DownloadStockFile, default=False, help = ' - download file with not correction from cloud storage')
+    parser.add_argument ('-pDSF', '--pathDownloadStockFile', default = '')
+    return parser
+
+
+if __name__ == '__main__':
+    parser = createParser()
+    namespace = parser.parse_args(sys.argv[1:])
+   
+    if namespace.DownloadStockFile and namespace.pathDownloadStockFile != '':
+        # Получаем загрузочную ссылку
+        final_url = base_url + urlencode(dict(public_key=public_key))
+        response = requests.get(final_url)
+        download_url = response.json()['href']
+        
+        # Загружаем файл и сохраняем его
+        download_response = requests.get(download_url)
+        with open(namespace.pathDownloadStockFile + 'nethasp.ini', 'wb') as f:   # Здесь укажите нужный путь к файлу
+            f.write(download_response.content) 
+   
+    if namespace.readFile:
+        if namespace.argument == '':
+            f = open(namespace.path, 'r') 
+            for line in f:
+                print(line)
+        else:
+            f = open(namespace.path, 'r') 
+            for line in f:
+                if namespace.argument in line:
+                    print(line)
+     
+    if namespace.write and namespace.argument != '' and namespace.valueParametr != '':
+       
+        coutLineWithComment  = 0 #Количестов строк с комментарием (если больше одной значит параметр указан неполностью, если 0 значит ошибка в наименовании параметра)
+        countLine = 0 # Количество активных строк с указанным параметром
+       
+        #Читаем файл и проверяем наличие активных аргументов (без комментариев)
+        f = open(namespace.path, 'r') 
+        for line in f:
+            if namespace.argument in line and (line[0] != ';' or line[1] != ';' and (line[0] != '[' and line[-1] != ']')): 
+                countLine+=1
+        f.close()
+        
+        #Читаем файл и проверяем существование такого аргумента исключая заголовки в квадратных скобках
+        f = open(namespace.path, 'r')        
+        for line2 in f:
+            if namespace.argument in line2 and (line2[0] != '[' and line2[-1] != ']'): 
+                coutLineWithComment+=1
+        f.close()
+        
+        print(countLine)
+        print(coutLineWithComment)
+       
+        # Если параметр найден только один и нет сторк без комментариев, просто добавляем новую строку 
+        if coutLineWithComment == 1 and countLine == 0: 
+            try:
+                with open(namespace.path, 'a') as f:
+                    f.write('\n\n' + namespace.argument + ' = ' + namespace.valueParametr + '\n')
+                    print('File succsesful is be writed')
+            except:
+                print('Error writed file')
+        elif countLine == 1:
+            # Закомментировать существующую строку и написать нашу
+            pass
+        else:
+            print('file will not be written.  Error argument.') 
+    elif namespace.write and (namespace.argument == '' or namespace.valueParametr == ''):
+        print('Error writed file. Not enough parametrs')
+
+
+  
