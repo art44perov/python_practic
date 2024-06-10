@@ -16,11 +16,7 @@ from urllib.parse import urlencode
 
 base_url = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
 public_key = '' #Ссылка на скачивание файла с яндекс диска  
-readFile = True
-writeFile = True
-globalDiskUpload = True
-sharedDiskDownload = True
-DownloadStockFile = True
+readFile, writeFile, globalDiskUpload, sharedDiskDownload, DownloadStockFile = True, True, True, True, True
 
 def createParser ():
     parser = argparse.ArgumentParser()
